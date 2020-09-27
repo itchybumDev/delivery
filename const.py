@@ -56,13 +56,6 @@ HELP_ADMIN_TEXT = """--<i>Here is a list of commands for you.</i>--
 /list_job
 
 /help_admin
-
-/add_dev
-
-/broadcast <i>[Message] </i>
-
-/reply <i>[chat_id]</i> <i>[Message]</i>
-
 """
 
 PLEASE_TRY_AGAIN = """
