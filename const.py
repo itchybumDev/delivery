@@ -45,17 +45,17 @@ HELP_ADMIN_TEXT = """--<i>Here is a list of commands for you.</i>--
 
 /get_all_user
 
-/add_stock <i>[Stock_symbol]</i> 
-
-/add_sgx <i>[Stock_symbol]</i> 
-
-/save_user_data <i>[File_name]</i>
-
-/save_symbol_data <i>[File_name]</i>
-
-/save_data <i>[File_name]</i>
-
 /number_of_user
+
+/add_job [address] [note]
+
+/remove_job [job id]
+
+/mark_done [job id]
+
+/list_job
+
+/help_admin
 
 /add_dev
 
