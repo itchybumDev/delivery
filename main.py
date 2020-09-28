@@ -266,7 +266,7 @@ def abandon_job(update, context, jobId):
         return msg
 
 # Stages
-FIRST, SECOND, THREE, FOUR, FIVE = range(5)
+FIRST, SECOND, THREE, FOUR, FIVE, END = range(6)
 # Callback data
 ONE, TWO, THREE, FOUR = range(4)
 
@@ -296,6 +296,7 @@ def start(update, context):
     # Tell ConversationHandler that we're in state `FIRST` now
     return FIRST
 
+@logInline
 def start_over(update, context):
     """Prompt same text & keyboard as `start` does but not as new message"""
     # Get CallbackQuery from Update
@@ -317,7 +318,7 @@ def start_over(update, context):
     )
     return FIRST
 
-
+@logInline
 def myJobs(update, context):
     userId = update.effective_chat.id
     query = update.callback_query
@@ -343,8 +344,7 @@ def myJobs(update, context):
         send_plain_text(update, context, 'You have no Active Jobs')
         return ConversationHandler.END
 
-
-
+@logInline
 def showJobs(update, context):
     """Show active jobs of buttons"""
     query = update.callback_query
@@ -371,9 +371,9 @@ def showJobs(update, context):
         text=msg,
         reply_markup=reply_markup
     )
-    return FOUR
+    return THREE
 
-
+@logInline
 def two(update, context):
     """Show new choice of buttons"""
     query = update.callback_query
@@ -389,7 +389,7 @@ def two(update, context):
     )
     return FIRST
 
-
+@logInline
 def take_job(update, context):
     """Pick a job"""
     query = update.callback_query
@@ -409,7 +409,7 @@ def take_job(update, context):
     # Transfer to conversation state `SECOND`
     return FIVE
 
-
+@logInline
 def choose_one_job(update, context):
     """Show new choice of buttons"""
     query = update.callback_query
@@ -428,7 +428,7 @@ def choose_one_job(update, context):
     )
     return FIVE
 
-
+@logInline
 def done(update, context):
     # Done
     query = update.callback_query
@@ -446,7 +446,7 @@ def done(update, context):
                                  "please wait for admin to confirm the status".format(jobId))
     return ConversationHandler.END
 
-
+@logInline
 def abandon(update, context):
     # Abandon
     query = update.callback_query
@@ -465,7 +465,7 @@ def abandon(update, context):
     query.edit_message_text(text="You have abandoned job {} ".format(jobId))
     return ConversationHandler.END
 
-
+@logInline
 def end(update, context):
     """Returns `ConversationHandler.END`, which tells the
     ConversationHandler that the conversation is over"""
@@ -491,8 +491,7 @@ def main():
             FOUR: [CallbackQueryHandler(choose_one_job)],
             FIVE: [CallbackQueryHandler(done, pattern='DONE*'),
                    CallbackQueryHandler(abandon, pattern='ABANDON*')],
-            SECOND: [CallbackQueryHandler(start_over, pattern='^' + str(ONE) + '$'),
-                     CallbackQueryHandler(end, pattern='^' + str(TWO) + '$')]
+            END: [CallbackQueryHandler(end)]
         },
         fallbacks=[CommandHandler('start', start)]
     )
