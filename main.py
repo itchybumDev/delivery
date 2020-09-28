@@ -327,7 +327,7 @@ def myJobs(update, context):
 
     keyboard = []
     for job in ad.getCurrentJobs().values():
-        if job.assignee == str(userId):
+        if str(job.assignee) == str(userId):
             msg += job.toString() + '\n'
             v = str(job.jobId) + '-' + job.address
             keyboard.append([InlineKeyboardButton(v, callback_data=str(job.jobId))])
