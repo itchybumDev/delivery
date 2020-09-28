@@ -42,7 +42,7 @@ def loadJobs():
         for row in reader:
             tmp = Job.fromRow(row)
             currentJobs[tmp.jobId] = tmp
-            if tmp.jobId > idCounter[0]:
+            if tmp.jobId >= idCounter[0]:
                 idCounter[0] = tmp.jobId + 1
     return True
 
@@ -73,6 +73,18 @@ def markDone(id):
     saveDoneJobs(curr_job)
     return text
 
+def markAssigned(id, userId):
+    curr_job = currentJobs[int(id)]
+    curr_job.set_state('Assigned')
+    curr_job.set_assignee(userId)
+    saveJobs()
+
+
+def markUnAssigned(id):
+    curr_job = currentJobs[int(id)]
+    curr_job.set_state('Unassigned')
+    curr_job.set_assignee(None)
+    saveJobs()
 
 
 def log(message):
