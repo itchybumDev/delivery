@@ -1,27 +1,17 @@
-START_TEXT = """
+START_TEXT_ONE = """
 Hello <b>{}</b>, Welcome to your personal assistant Delivery Guide!
+"""
 
+START_TEXT_TWO = """
 My name is Debbie. I am here to assist you with the delivery from now on.
- 
-Click help to begin: 
-/help
+
+Use /help for more information:
 """
 
 HELP_TEXT = """--<i>Here is a list of commands</i>--
 
-/jobs
-View all active Jobs
-
-/my_current_job
-View your current jobs
-
-/take_job <i>[Job Id]</i>
-Register your interest in the job. 
-Eg: /take_job 2
-
-/abandon <i>[Job Id]</i>
-De-register your interest in the job. 
-Eg: /abandon_job 2
+/start
+Start new job
 
 /help
 Display this list again.

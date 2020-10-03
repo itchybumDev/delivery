@@ -11,7 +11,7 @@ from telegram.ext.dispatcher import run_async
 
 import Admin as ad
 from PortfolioUpdate import generate_email
-from const import START_TEXT, HELP_TEXT, HELP_ADMIN_TEXT, CONTACT_INFO_TEXT, PLEASE_TRY_AGAIN
+from const import START_TEXT_ONE, START_TEXT_TWO, HELP_TEXT, HELP_ADMIN_TEXT, CONTACT_INFO_TEXT, PLEASE_TRY_AGAIN
 from logging_handler import logInline
 
 logging.basicConfig(level=logging.DEBUG,
@@ -166,7 +166,7 @@ def remove_job(update, context):
 @authorize
 def add_job(update, context):
     # address,note
-    msg = ' '.join(context.args).split('#')
+    msg = ' '.join(context.args).split('^')
     ad.createNewJob(msg[0], msg[1])
     for job in ad.getCurrentJobs().values():
         send_plain_text(update, context, job.toString())
@@ -282,6 +282,12 @@ def start(update, context):
     # and a string as callback_data
     # The keyboard is a list of button rows, where each row is in turn
     # a list (hence `[[...]]`).
+    update.message.reply_text(
+        START_TEXT_ONE.format(update.effective_user.full_name),
+        parse_mode=ParseMode.HTML,
+        reply_markup=telegram.ReplyKeyboardRemove()
+    )
+
     keyboard = [
         [InlineKeyboardButton("New Jobs", callback_data=str(ONE)),
          InlineKeyboardButton("My Jobs", callback_data=str(TWO))]
@@ -289,7 +295,7 @@ def start(update, context):
     reply_markup = InlineKeyboardMarkup(keyboard)
     # Send message with text and appended InlineKeyboard
     update.message.reply_text(
-        START_TEXT.format(update.effective_user.full_name),
+        START_TEXT_TWO,
         parse_mode=ParseMode.HTML,
         reply_markup=reply_markup
     )
@@ -304,19 +310,16 @@ def start_over(update, context):
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
     query.answer()
-    keyboard = [
-        [InlineKeyboardButton("1", callback_data=str(ONE)),
-         InlineKeyboardButton("2", callback_data=str(TWO))]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    # Instead of sending a new message, edit the message that
-    # originated the CallbackQuery. This gives the feeling of an
-    # interactive menu.
-    query.edit_message_text(
-        text="Start handler, Choose a route",
-        reply_markup=reply_markup
-    )
-    return FIRST
+    main_menu_keyboard = [[telegram.KeyboardButton('/start')],
+                          [telegram.KeyboardButton('/contact_us')]]
+    reply_kb_markup = telegram.ReplyKeyboardMarkup(main_menu_keyboard,
+                                                   resize_keyboard=True,
+                                                   one_time_keyboard=True)
+
+    # Send the message with menu
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                     text='Do you want to find another job?',
+                     reply_markup=reply_kb_markup)
 
 @logInline
 def myJobs(update, context):
@@ -342,6 +345,7 @@ def myJobs(update, context):
         return FOUR
     else:
         send_plain_text(update, context, 'You have no Active Jobs')
+        start_over(update,context)
         return ConversationHandler.END
 
 @logInline
@@ -444,6 +448,7 @@ def done(update, context):
 
     query.edit_message_text(text="Congratulations, you have successfully completed job {}, "
                                  "please wait for admin to confirm the status".format(jobId))
+    start_over(update, context)
     return ConversationHandler.END
 
 @logInline
@@ -463,6 +468,7 @@ def abandon(update, context):
     notifyAdmin(text, context)
 
     query.edit_message_text(text="You have abandoned job {} ".format(jobId))
+    start_over(update, context)
     return ConversationHandler.END
 
 @logInline
