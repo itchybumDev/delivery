@@ -1,14 +1,7 @@
-import re
 import smtplib
 import ssl
-import time
-import urllib.request
-import requests
-import json
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-from bs4 import BeautifulSoup
 
 
 def sendEmail(row_body, email_address):

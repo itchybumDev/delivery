@@ -217,6 +217,18 @@ def list_job(update, context):
 
     send_plain_text(update, context, msg)
 
+@authorize
+@run_async
+def download_all(update, context):
+    with open("./db/jobs.csv", 'rb') as f:
+        context.bot.send_document(chat_id=update.effective_chat.id, document=f, filename='jobs.csv')
+    with open("./db/done_jobs.csv", 'rb') as f:
+        context.bot.send_document(chat_id=update.effective_chat.id, document=f, filename='done_jobs.csv')
+    with open("./db/userData.csv", 'rb') as f:
+        context.bot.send_document(chat_id=update.effective_chat.id, document=f, filename='userData.csv')
+    with open("./db/userData.pickle", 'rb') as f:
+        context.bot.send_document(chat_id=update.effective_chat.id, document=f, filename='userData.pickle')
+
 
 @run_async
 def active_job(update, context):
@@ -528,6 +540,7 @@ def main():
         ["broadcast", broadcast],
         ["mark_done", mark_done],
         ["reply", reply],
+        ["download_all", download_all],
     ]
 
     for command, function in admin_commands:
