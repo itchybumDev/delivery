@@ -128,7 +128,7 @@ def help_admin(update, context):
 def add_admin(update, context):
     ad.addDevTeam(context.args[0])
     send_plain_text(update, context,
-                    "Added Dev: {} \n{}".format(update.effective_chat.id, update.effective_chat.full_name))
+                    "Added Dev: {}".format(update.effective_chat.id))
 
 @authorize
 @run_async

@@ -107,6 +107,7 @@ def getDevTeam():
 
 def addDevTeam(admin):
     dev_team.append(str(admin))
+    saveDevTeam()
 
 
 def loadDevTeam():
