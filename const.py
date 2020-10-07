@@ -33,11 +33,9 @@ Send us short query directly on Telegram
 
 HELP_ADMIN_TEXT = """--<i>Here is a list of commands for you.</i>--
 
-/get_all_user
-
 /number_of_user
 
-/add_job [address] [note]
+/add_job [address]^[note]
 
 /remove_job [job id]
 
