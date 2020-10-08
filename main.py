@@ -456,6 +456,7 @@ def done(update, context):
     curr_job = ad.getCurrentJobs()[int(jobId)]
     text = ad.getCurrentJobs()[int(jobId)].toString() + '\nhas been DONE by \n\n'
     text += ad.getUser(curr_job.assignee).toString() + '\n'
+    text += 'Please confirm the status as DONE using /mark_done [job_id]'
     notifyAdmin(text, context)
 
     query.edit_message_text(text="Congratulations, you have successfully completed job {}, "
@@ -471,13 +472,12 @@ def abandon(update, context):
     jobId = query.data.split(' ')[1]
 
     curr_job = ad.getCurrentJobs()[int(jobId)]
-    assignee = curr_job.assignee
 
     abandon_job(update, context, jobId)
 
-    text = ad.getCurrentJobs()[int(jobId)].toString() + '\nhas been ABANDONED by \n\n'
-    text += ad.getUser(assignee).toString() + '\n'
-    notifyAdmin(text, context)
+    # text = ad.getCurrentJobs()[int(jobId)].toString() + '\nhas been ABANDONED by \n\n'
+    # text += ad.getUser(assignee).toString() + '\n'
+    # notifyAdmin(text, context)
 
     query.edit_message_text(text="You have abandoned job {} ".format(jobId))
     start_over(update, context)
